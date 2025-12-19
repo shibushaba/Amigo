@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+{% block title %}Add Step - Progress Autopilot{% endblock %}
+{% block content %}
+
+<div style="max-width: 600px; margin: 0 auto;">
+  <div style="margin-bottom: 2rem;">
+    <a href="{% url 'goal_detail' goal.id %}" style="color: var(--accent-primary); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem;">
+      ← Back to Goal
+    </a>
+    <h1>Add Step to <span style="background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">{{ goal.title }}</span></h1>
+    <p style="color: var(--text-muted);">Break down your goal into smaller, actionable steps</p>
+  </div>
+
+  <div class="card">
+    <form method="post" style="gap: 1.5rem;">
+      {% csrf_token %}
+      
+      {% for field in form %}
+        <div>
+          <label for="{{ field.id_for_label }}" style="font-weight: 600;">
+            {{ field.label }}
+          </label>
+          {{ field }}
+          {% if field.help_text %}
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem;">{{ field.help_text|safe }}</p>
+          {% endif %}
+          {% if field.errors %}
+            <div style="color: var(--danger); font-size: 0.85rem; margin-top: 0.25rem;">
+              {% for error in field.errors %}
+                <p>{{ error }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button type="submit" class="btn">✓ Add Step</button>
+        <a href="{% url 'goal_detail' goal.id %}" class="btn btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
