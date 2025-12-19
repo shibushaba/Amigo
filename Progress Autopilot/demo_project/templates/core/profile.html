@@ -1,0 +1,110 @@
+{% extends 'core/base.html' %}
+{% block title %}Profile - Progress Autopilot{% endblock %}
+{% block content %}
+
+<div style="max-width: 700px; margin: 0 auto;">
+  <h1 style="margin-bottom: 2rem;">Your Profile</h1>
+
+  <!-- Level & XP Bar -->
+  <div class="card" style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+      <h2 style="margin: 0;">Level {{ level.level }}</h2>
+      <span style="font-size: 0.9rem; color: var(--text-muted);">{{ level.xp }} / {{ level.xp|add:200 }} XP</span>
+    </div>
+    <div style="width: 100%; height: 12px; background: var(--border-color); border-radius: 6px; overflow: hidden; margin-bottom: 1rem;">
+      <div style="height: 100%; width: {{ level.progress }}%; background: linear-gradient(90deg, var(--info) 0%, var(--accent-primary) 100%); transition: width 0.3s ease;"></div>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.9rem;">Next level: {{ level.progress }}% complete</p>
+  </div>
+
+  <!-- Stats Grid -->
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+    <div class="card" style="text-align: center; padding: 1.5rem;">
+      <div style="font-size: 2rem; margin-bottom: 0.5rem;">⭐</div>
+      <p style="color: var(--text-muted); margin-bottom: 0.5rem;">Total XP</p>
+      <p style="font-size: 1.75rem; font-weight: 700; background: linear-gradient(135deg, var(--info) 0%, #2563eb 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        {{ profile.xp }}
+      </p>
+    </div>
+
+    <div class="card" style="text-align: center; padding: 1.5rem;">
+      <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔥</div>
+      <p style="color: var(--text-muted); margin-bottom: 0.5rem;">Streak</p>
+      <p style="font-size: 1.75rem; font-weight: 700; background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        {{ profile.streak }}d
+      </p>
+    </div>
+
+    <div class="card" style="text-align: center; padding: 1.5rem;">
+      <div style="font-size: 2rem; margin-bottom: 0.5rem;">💰</div>
+      <p style="color: var(--text-muted); margin-bottom: 0.5rem;">Coins</p>
+      <p style="font-size: 1.75rem; font-weight: 700; background: linear-gradient(135deg, var(--success) 0%, #059669 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+        {{ profile.coins }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Achievements -->
+  {% if achievements %}
+  <div class="card" style="margin-bottom: 2rem;">
+    <h2 style="margin-bottom: 1.5rem;">🏆 Achievements ({{ achievements|length }})</h2>
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem;">
+      {% for achievement in achievements %}
+        <div style="padding: 1.5rem; background: var(--bg-secondary); border-radius: 8px; text-align: center; border: 2px solid var(--accent-primary)20; transition: all 0.2s;">
+          <div style="font-size: 2.5rem; margin-bottom: 0.5rem;">{{ achievement.icon }}</div>
+          <div style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary); margin-bottom: 0.5rem;">{{ achievement.name }}</div>
+          <div style="font-size: 0.75rem; color: var(--text-muted);">{{ achievement.desc }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+  <!-- Settings Card -->
+  <div class="card">
+    <h2 style="margin-bottom: 1.5rem;">⚙️ Preferences</h2>
+    
+    <form method="post" style="gap: 1.5rem;">
+      {% csrf_token %}
+      
+      <div>
+        <label for="motivation_mode" style="font-weight: 600;">Motivation Mode</label>
+        <select name="motivation_mode" id="motivation_mode" style="width: 100%; padding: 0.875rem; border: 1.5px solid var(--border-color); border-radius: 8px; margin-top: 0.5rem;">
+          <option value="soft" {% if profile.motivation_mode == 'soft' %}selected{% endif %}>
+            🌱 Soft - Gentle and encouraging
+          </option>
+          <option value="balanced" {% if profile.motivation_mode == 'balanced' %}selected{% endif %}>
+            ⚖️ Balanced - Mix of support and challenge
+          </option>
+          <option value="hardcore" {% if profile.motivation_mode == 'hardcore' %}selected{% endif %}>
+            💪 Hardcore - Push me to the limit
+          </option>
+          <option value="reward" {% if profile.motivation_mode == 'reward' %}selected{% endif %}>
+            🎁 Reward - Gamified with rewards
+          </option>
+        </select>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.5rem;">Choose how the system should motivate you</p>
+      </div>
+
+      <div style="display: flex; gap: 1rem;">
+        <button type="submit" class="btn">Save Preferences</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Recent Activity -->
+  <div class="card" style="margin-top: 2rem;">
+    <h2 style="margin-bottom: 1.5rem;">📈 Quick Stats</h2>
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-primary); border-radius: 8px;">
+        <span style="color: var(--text-secondary);">Account created</span>
+        <span style="font-weight: 600; color: var(--text-primary);">{{ user.date_joined|date:'M d, Y' }}</span>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-primary); border-radius: 8px;">
+        <span style="color: var(--text-secondary);">Last activity</span>
+        <span style="font-weight: 600; color: var(--text-primary);">Today</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

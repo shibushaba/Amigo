@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+{% block title %}Your Goals - Progress Autopilot{% endblock %}
+{% block content %}
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+  <h1>Your Goals</h1>
+  <a href="{% url 'goal_create' %}" class="btn">+ New Goal</a>
+</div>
+
+{% if goals %}
+  <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+    {% for goal in goals %}
+      <div class="card" style="display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+          <h3 style="margin: 0; flex: 1;">{{ goal.title }}</h3>
+          <span style="font-size: 0.75rem; padding: 0.25rem 0.75rem; background: linear-gradient(135deg, var(--accent-primary) 0%, var(--accent-secondary) 100%); color: white; border-radius: 999px; white-space: nowrap;">
+            {{ goal.priority|upper }}
+          </span>
+        </div>
+        
+        <p style="color: var(--text-secondary); margin-bottom: 1rem; flex: 1;">{{ goal.description|truncatewords:15 }}</p>
+        
+        <div style="padding: 0.75rem; background: var(--bg-primary); border-radius: 8px; margin-bottom: 1rem; font-size: 0.85rem;">
+          <span style="color: var(--text-muted);">Status: </span>
+          <span style="font-weight: 600; color: var(--accent-primary);">{{ goal.status|upper }}</span>
+        </div>
+
+        <a href="{% url 'goal_detail' goal.id %}" class="btn btn-secondary" style="width: 100%; justify-content: center;">View Details</a>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="card text-center">
+    <h2 style="font-size: 1.5rem; margin-bottom: 1rem;">No Goals Yet</h2>
+    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Create your first goal to start your progress journey</p>
+    <a href="{% url 'goal_create' %}" class="btn">+ Create First Goal</a>
+  </div>
+{% endif %}
+
+{% endblock %}
