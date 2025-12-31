@@ -9,3 +9,4 @@ class CoreConfig(AppConfig):
             import demo_project.core.signals
         except Exception:
             pass
+
