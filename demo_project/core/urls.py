@@ -4,6 +4,8 @@ from . import views
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
     path('signup/', views.signup_view, name='signup'),
+    # Provide compatibility with Django's default auth redirect (/accounts/login/)
+    path('accounts/login/', views.login_view, name='accounts_login'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
 

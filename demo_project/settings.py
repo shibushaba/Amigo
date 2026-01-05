@@ -62,4 +62,11 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [ BASE_DIR / 'static' ]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Where unauthenticated users are redirected to log in
+LOGIN_URL = '/login/'
+# Where users are redirected after login/logout
+LOGIN_REDIRECT_URL = 'dashboard'
+LOGOUT_REDIRECT_URL = 'login'
+
 DEFAULT_AUTO_FIELD='django.db.models.BigAutoField'

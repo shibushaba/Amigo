@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% block title %}Login - Progress Autopilot{% endblock %}
+{% block content %}
+
+<div style="max-width: 400px; margin: 3rem auto;">
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">Sign In</h1>
+    <p style="color: var(--text-muted);">Use your credentials to sign in</p>
+  </div>
+
+  <form method="post">
+    {% csrf_token %}
+    <div>
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" required autofocus>
+    </div>
+    <div>
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <button type="submit" class="btn" style="width: 100%;">Sign In</button>
+  </form>
+
+  <div style="text-align: center; margin-top: 1rem;">
+    <p style="color: var(--text-secondary);">New here? <a href="{% url 'signup' %}">Create an account</a></p>
+  </div>
+</div>
+
+{% endblock %}

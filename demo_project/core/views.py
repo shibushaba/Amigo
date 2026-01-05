@@ -22,13 +22,25 @@ def signup_view(request):
     return render(request, 'core/signup.html', {'form':f})
 
 def login_view(request):
-    if request.user.is_authenticated: return redirect('dashboard')
-    if request.method=='POST':
-        u = request.POST.get('username'); p = request.POST.get('password')
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    if request.method == 'POST':
+        u = request.POST.get('username')
+        p = request.POST.get('password')
         user = authenticate(request, username=u, password=p)
-        if user: login(request,user); return redirect('dashboard')
-        else: messages.error(request,"Invalid credentials")
-    return render(request,'core/login.html')
+        if user:
+            login(request, user)
+            return redirect('dashboard')
+        else:
+            messages.error(request, "Invalid credentials")
+    # Try our primary template, fall back to the registration/login template if missing
+    from django.template import TemplateDoesNotExist
+    try:
+        return render(request, 'core/login.html')
+    except TemplateDoesNotExist:
+        # In some deployments templates under 'core/' were not packaged — use a fallback
+        messages.warning(request, "Using fallback login template")
+        return render(request, 'registration/login.html')
 
 def logout_view(request):
     logout(request); return redirect('login')
