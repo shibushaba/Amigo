@@ -1,7 +1,8 @@
 from pathlib import Path
 import os
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+# BASE_DIR should point at the Django project folder (where manage.py, db.sqlite3, templates/ and static/ live)
+BASE_DIR = Path(__file__).resolve().parent
 
 SECRET_KEY = 'dev-secret-key-change-me'
 DEBUG = True
@@ -43,13 +44,12 @@ TEMPLATES = [
     }
 ]
 
-WSGI_APPLICATION = 'demo_project.wsgi.application'
+# Sanity check: warn at startup if the configured templates directory doesn't exist
+_templates_dir = TEMPLATES[0]['DIRS'][0]
+if not _templates_dir.exists():
+    import warnings
+    warnings.warn(f"Templates directory {_templates_dir} does not exist; check BASE_DIR and project layout", RuntimeWarning)
 
-DATABASES = {
-    'default':{
-        'ENGINE':'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
 }
 
 AUTH_PASSWORD_VALIDATORS = []
