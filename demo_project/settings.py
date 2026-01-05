@@ -50,7 +50,7 @@ if not _templates_dir.exists():
     import warnings
     warnings.warn(f"Templates directory {_templates_dir} does not exist; check BASE_DIR and project layout", RuntimeWarning)
 
-}
+
 
 AUTH_PASSWORD_VALIDATORS = []
 LANGUAGE_CODE='en-us'
