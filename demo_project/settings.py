@@ -18,6 +18,7 @@ INSTALLED_APPS = [
 
     'demo_project.core.apps.CoreConfig',
     'demo_project.gamify.apps.GamifyConfig',
+    'core',
 ]
 
 
